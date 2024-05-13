@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { getMovieData } from "~/utils/getMovieData";
 import YoutubeVideo from "~/components/Youtube";
 
 const MovieCard = ({ movie = {} }) => {
   const { title, video, releaseYear, movieRuntime, rating, genres, overview } =
     getMovieData(movie);
+
+  const [expanded, setExpanded] = useState(false);
+
+  const toggleExpand = () => {
+    setExpanded(!expanded);
+  };
 
   return (
     <>
@@ -24,13 +30,25 @@ const MovieCard = ({ movie = {} }) => {
           {genres.map((_g) => (
             <div
               key={_g.id}
-              className="border-green border-[1px] px-2 py-1 rounded-full"
+              className="border-green border-[1px] px-2 py-1 rounded-full text-green"
             >
               {_g.name}
             </div>
           ))}
         </div>
-        <p className=" text-base">{overview}</p>
+        <div>
+          <span className="text-base">
+            {expanded ? overview : `${overview.slice(0, 220)}...`}
+          </span>
+          {overview.length > 220 && (
+            <span
+              className="text-base text-green cursor-pointer ml-2 hover:underline"
+              onClick={toggleExpand}
+            >
+              {expanded ? "Read Less" : "Read More"}
+            </span>
+          )}
+        </div>
       </div>
     </>
   );
