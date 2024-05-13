@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    --color-primary: #f8f8f8;
+    --color-secondary: #fff;
+    --color-typography: #000000;
+  }
+  @import "./themes/light.scss";
+  @import "./themes/dark.scss";
+}
+
+// components
+@import "./components/Icons.scss";
