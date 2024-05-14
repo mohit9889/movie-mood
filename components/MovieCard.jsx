@@ -38,7 +38,11 @@ const MovieCard = ({ movie = {} }) => {
         </div>
         <div>
           <span className="text-base">
-            {expanded ? overview : `${overview.slice(0, 220)}...`}
+            {expanded
+              ? overview
+              : `${overview.slice(0, 220)}${
+                  overview.length > 220 ? "..." : ""
+                }`}
           </span>
           {overview.length > 220 && (
             <span
