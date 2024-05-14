@@ -40,21 +40,21 @@ const MovieCard = ({ movie = {} }) => {
           ))}
         </div>
         <div>
-          <span className="text-base">
+          <span className="text-base min-h-[72px] block">
             {expanded
               ? overview
               : `${overview.slice(0, overviewLength)}${
-                  overview.length > overview ? "..." : ""
+                  overview.length > overviewLength ? "..." : ""
                 }`}
+            {overview.length > overviewLength && (
+              <span
+                className="text-base text-green cursor-pointer ml-2 hover:underline"
+                onClick={toggleExpand}
+              >
+                {expanded ? "Read Less" : "Read More"}
+              </span>
+            )}
           </span>
-          {overview.length > overviewLength && (
-            <span
-              className="text-base text-green cursor-pointer ml-2 hover:underline"
-              onClick={toggleExpand}
-            >
-              {expanded ? "Read Less" : "Read More"}
-            </span>
-          )}
         </div>
       </div>
     </>

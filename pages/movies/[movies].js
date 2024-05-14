@@ -1,10 +1,14 @@
 import MovieSlider from "~/components/MovieSlider";
 import { getMoviesByGenre } from "~/api/index";
 
-const Movies = ({ movies = [] }) => {
+const Movies = ({ genreId, movies = [] }) => {
   return (
     <div>
-      {movies.length > 0 ? <MovieSlider movies={movies} /> : <p>No Data</p>}
+      {movies.length > 0 ? (
+        <MovieSlider genreId={genreId} movies={movies} />
+      ) : (
+        <p>No Data</p>
+      )}
     </div>
   );
 };
@@ -14,7 +18,7 @@ export async function getServerSideProps(ctx) {
     query: { movies },
   } = ctx;
   const genreId = movies.split("-")[1];
-  const response = await getMoviesByGenre(genreId);
+  const response = await getMoviesByGenre(genreId, 1);
 
   if (response.status === 404) {
     return {
@@ -25,7 +29,7 @@ export async function getServerSideProps(ctx) {
     };
   }
 
-  return { props: { movies: response.results } };
+  return { props: { genreId, movies: response.results } };
 }
 
 export default Movies;

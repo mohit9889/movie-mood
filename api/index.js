@@ -3,7 +3,7 @@ const BASE_URL = process.env.BASE_URL;
 // Function to fetch movie genres
 export async function getMovieGenres() {
   try {
-    const response = await fetch(`${process.env.BASE_URL}/api/movieGenres`);
+    const response = await fetch(`${BASE_URL}/api/movieGenres`);
     const data = await response.json();
     return data;
   } catch (err) {
@@ -12,10 +12,10 @@ export async function getMovieGenres() {
 }
 
 // Function to fetch movies by genre
-export async function getMoviesByGenre(genreId) {
+export async function getMoviesByGenre(genreId, page) {
   try {
     const response = await fetch(
-      `${process.env.BASE_URL}/api/moviesByGenre?genreId=${genreId}`
+      `${BASE_URL}/api/moviesByGenre?genreId=${genreId}&page=${page}`
     );
     const data = await response.json();
     return data;

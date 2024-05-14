@@ -27,7 +27,7 @@ export const getMovieData = (movie) => {
     ? convertMinutesToHoursAndMinutes(runtime)
     : "";
   const rating = get(movie, "vote_average", "");
-  const genres = get(movie, "genres", "");
+  const genres = get(movie, "genres", []);
   const overview = get(movie, "overview", "");
 
   return {

@@ -2,14 +2,14 @@ const MOVIE_API_KEY = process.env.MOVIE_API_KEY;
 
 export default async function handler(req, res) {
   if (req.method === "GET") {
-    const { genreId } = req.query;
+    const { genreId, page } = req.query;
     if (!genreId) {
       return res.status(400).json({ error: "Genre ID is required" });
     }
     try {
       // Fetch movies by genre
       const moviesResponse = await fetch(
-        `https://api.themoviedb.org/3/discover/movie?api_key=${MOVIE_API_KEY}&language=en-US&sort_by=popularity.desc&with_genres=${genreId}`
+        `https://api.themoviedb.org/3/discover/movie?api_key=${MOVIE_API_KEY}&language=en-US&sort_by=popularity.desc&with_genres=${genreId}&page=${page}`
       );
       const moviesData = await moviesResponse.json();
 

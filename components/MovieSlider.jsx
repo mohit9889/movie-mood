@@ -1,21 +1,35 @@
 import { useState, useEffect } from "react";
 import MovieCard from "./MovieCard";
-// import { useSwipeable } from "react-swipeable";
-// import useIsMobile from "~/hooks/useIsMobile";
+import { useLoading } from "~/context/loadingContext";
+import { getMoviesByGenre } from "~/api";
 
-const MovieSlider = ({ movies }) => {
-  // const isMobile = useIsMobile();
+const MovieSlider = ({ genreId, movies }) => {
+  const [moviesData, setMoviesData] = useState(movies);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const { setIsLoading } = useLoading();
 
-  const nextSlide = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === movies.length - 1 ? 0 : prevIndex + 1
-    );
+  const nextSlide = async () => {
+    if (currentIndex === moviesData.length - 1) {
+      try {
+        setIsLoading(true);
+        const newMovies = await getMoviesByGenre(genreId, currentPage + 1);
+        if (newMovies.results.length > 0) {
+          setCurrentPage(currentPage + 1);
+          setMoviesData((prevMovies) => [...prevMovies, ...newMovies.results]);
+        }
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching next page:", error);
+        setIsLoading(false);
+      }
+    }
+    setCurrentIndex((prevIndex) => prevIndex + 1);
   };
 
   const prevSlide = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? movies.length - 1 : prevIndex - 1
+      prevIndex === 0 ? moviesData.length - 1 : prevIndex - 1
     );
   };
 
@@ -35,39 +49,26 @@ const MovieSlider = ({ movies }) => {
     };
   }, [currentIndex]);
 
-  // const handlers = useSwipeable({
-  //   onSwipedLeft: nextSlide,
-  //   onSwipedRight: prevSlide,
-  //   preventDefaultTouchmoveEvent: true,
-  //   trackMouse: true,
-  // });
-
   return (
     <div className="card card-compact md:card-normal w-full md:w-[40rem] bg-secondary rounded-xl shadow-xl mx-auto pb-4">
-      <MovieCard movie={movies[currentIndex]} />
-      {/* {isMobile ? (
-        <div
-          className="relative mx-4 rounded-full h-[50px] bg-green flex items-center justify-center text-white text-lg font-semibold"
-          {...handlers}
-        >
-          Swipe Here
-        </div>
-      ) : ( */}
+      <MovieCard movie={moviesData[currentIndex]} />
       <div className="px-4 flex justify-between">
         <button
-          className="bg-green text-white px-6 py-2 rounded-lg"
+          className={`bg-green opacity-85 hover:opacity-100 text-white px-6 py-2 rounded-lg ${
+            currentIndex === 0 ? "!bg-black-secondary !opacity-30" : ""
+          }`}
           onClick={prevSlide}
+          disabled={currentIndex === 0}
         >
           Prev
         </button>
         <button
-          className="bg-green text-white px-6 py-2 rounded-lg"
+          className="bg-green opacity-85 hover:opacity-100 text-white px-6 py-2 rounded-lg"
           onClick={nextSlide}
         >
           Next
         </button>
       </div>
-      {/* )} */}
     </div>
   );
 };
