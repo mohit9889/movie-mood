@@ -37,7 +37,8 @@ export async function getServerSideProps(ctx) {
   const {
     query: { movies },
   } = ctx;
-  const genreId = movies.split("-")[1];
+  const splitUrl = movies.split("-");
+  const genreId = splitUrl[splitUrl.length - 1];
   const response = await getMoviesByGenre(genreId, 1);
 
   if (response.status === 404) {
