@@ -15,6 +15,16 @@ export async function getServerSideProps(ctx) {
   } = ctx;
   const genreId = movies.split("-")[1];
   const response = await getMoviesByGenre(genreId);
+
+  if (response.status === 404) {
+    return {
+      redirect: {
+        destination: "/404",
+        permanent: false,
+      },
+    };
+  }
+
   return { props: { movies: response.results } };
 }
 

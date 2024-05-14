@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-import { getMovieData } from "~/utils/getMovieData";
 import YoutubeVideo from "~/components/Youtube";
+import useIsMobile from "~/hooks/useIsMobile";
+import { getMovieData } from "~/utils/getMovieData";
 
 const MovieCard = ({ movie = {} }) => {
+  const isMobile = useIsMobile();
+  const overviewLength = isMobile ? 150 : 220;
   const { title, video, releaseYear, movieRuntime, rating, genres, overview } =
     getMovieData(movie);
 
@@ -26,7 +29,7 @@ const MovieCard = ({ movie = {} }) => {
           <span className="mx-2">|</span>
           <span>{rating}/10</span>
         </div>
-        <div className="flex gap-3 text-xs mb-4">
+        <div className="flex gap-3 text-xs mb-4 overflow-auto">
           {genres.map((_g) => (
             <div
               key={_g.id}
@@ -40,11 +43,11 @@ const MovieCard = ({ movie = {} }) => {
           <span className="text-base">
             {expanded
               ? overview
-              : `${overview.slice(0, 220)}${
-                  overview.length > 220 ? "..." : ""
+              : `${overview.slice(0, overviewLength)}${
+                  overview.length > overview ? "..." : ""
                 }`}
           </span>
-          {overview.length > 220 && (
+          {overview.length > overviewLength && (
             <span
               className="text-base text-green cursor-pointer ml-2 hover:underline"
               onClick={toggleExpand}

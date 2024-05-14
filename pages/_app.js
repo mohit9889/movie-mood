@@ -26,7 +26,7 @@ export default function App({ Component, pageProps }) {
 
   return (
     <ThemesProvider>
-      <MainLayout>
+      <MainLayout loading={loading}>
         {loading && <FullPageLoader />}
         <Component {...pageProps} />
       </MainLayout>

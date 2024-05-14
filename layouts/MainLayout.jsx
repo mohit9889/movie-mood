@@ -8,9 +8,13 @@ const nunito = Nunito({
   variable: "--font-nunito",
 });
 
-const MainLayout = ({ children }) => {
+const MainLayout = ({ children, loading }) => {
   return (
-    <div className="bg-primary text-typography relative">
+    <div
+      className={`bg-primary text-typography ${
+        loading ? "relative overflow-hidden h-screen" : ""
+      }`}
+    >
       <div
         className={`${nunito.variable} font-sans min-h-screen w-full p-2 lg:p-6 max-w-4xl mx-auto`}
       >
