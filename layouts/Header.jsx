@@ -1,12 +1,27 @@
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { changeTheme } from "~/utils/themeChange";
 import { useThemes } from "~/context/themesContext";
+import { getFromSessionStorage } from "~/utils/sessionStorage";
 import Link from "next/link";
 import MovieSvg from "~/public/svgs/movie.svg";
 import MoonSvg from "~/public/svgs/moon.svg";
 import SunSvg from "~/public/svgs/sun.svg";
 
 const Header = () => {
+  const router = useRouter();
+  console.log(router.asPath);
   const { changeThemeContext, themeMode } = useThemes();
+
+  const [mood, setMood] = useState("Movie Mood");
+
+  useEffect(() => {
+    const mood =
+      getFromSessionStorage("current_mood") && router.asPath !== "/"
+        ? `${getFromSessionStorage("current_mood")} Mood`
+        : "Movie Mood";
+    setMood(mood);
+  }, [router]);
 
   const renderThemeChanger = () => {
     return (
@@ -57,7 +72,7 @@ const Header = () => {
         </Link>
       </div>
       <div className="flex w-1/2 justify-center items-center">
-        <span className="text-xl font-semibold">Movie Mood</span>
+        <span className="text-xl font-semibold">{mood}</span>
       </div>
       <div className="flex w-1/4 justify-end">{renderThemeChanger()}</div>
     </div>

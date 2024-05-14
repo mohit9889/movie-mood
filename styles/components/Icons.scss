@@ -12,14 +12,16 @@
   &-38 svg {
     @include set-dimensions(38px);
   }
-
+  &-12 svg {
+    @include set-dimensions(12px);
+  }
   &-20 svg {
     @include set-dimensions(20px);
   }
 
   &-white {
     svg path {
-      fill: white;
+      fill: white !important;
     }
   }
   &-black {

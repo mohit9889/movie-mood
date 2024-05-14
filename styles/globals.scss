@@ -12,5 +12,12 @@
   @import "./themes/dark.scss";
 }
 
+@layer utilities {
+  .backdrop-blur {
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
+}
+
 // components
 @import "./components/Icons.scss";

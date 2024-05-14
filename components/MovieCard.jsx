@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import Head from "next/head";
 import YoutubeVideo from "~/components/Youtube";
 import useIsMobile from "~/hooks/useIsMobile";
 import { getMovieData } from "~/utils/getMovieData";
+import { moviePage } from "~/constants/seoData";
 
 const MovieCard = ({ movie = {} }) => {
   const isMobile = useIsMobile();
@@ -15,8 +17,16 @@ const MovieCard = ({ movie = {} }) => {
     setExpanded(!expanded);
   };
 
+  const output = genres.map((item) => item.name).join(", ");
+  const newSeoKeywords = `${moviePage.keywords}, ${output}`;
+
   return (
     <>
+      <Head>
+        {/* Set the new keywords */}
+        <meta name="keywords" content={newSeoKeywords} />
+      </Head>
+
       <div className="w-full">
         <YoutubeVideo ytdId={video} />
       </div>
