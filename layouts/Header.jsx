@@ -10,7 +10,6 @@ import SunSvg from "~/public/svgs/sun.svg";
 
 const Header = () => {
   const router = useRouter();
-  console.log(router.asPath);
   const { changeThemeContext, themeMode } = useThemes();
 
   const [mood, setMood] = useState("Movie Mood");
