@@ -20,4 +20,7 @@ module.exports = {
   eslint: {
     ignoreDuringBuilds: false,
   },
+  images: {
+    domains: ["image.tmdb.org"],
+  },
 };
