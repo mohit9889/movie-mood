@@ -39,7 +39,6 @@ const MovieCard = ({ movie = {} }) => {
   useEffect(() => {
     async function fetchStream() {
       const streamRes = await getMovieStreaming(movieId);
-      console.log(streamRes, "<<RES");
       setStreamingData(streamRes);
     }
     fetchStream();
