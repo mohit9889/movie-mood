@@ -25,11 +25,7 @@ export default async function handler(req, res) {
         country.code = countryData.country_code;
       }
 
-      const streaming = data.results[country.code]
-        ? data.results[country.code]
-        : {};
-
-      res.status(200).json(streaming);
+      res.status(200).json({ streaming: data, country });
     } catch (error) {
       console.error("Error fetching movie genres:", error);
       res.status(500).json({ error: "Internal Server Error", status: 404 });

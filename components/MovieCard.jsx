@@ -39,7 +39,11 @@ const MovieCard = ({ movie = {} }) => {
   useEffect(() => {
     async function fetchStream() {
       const streamRes = await getMovieStreaming(movieId);
-      setStreamingData(streamRes);
+      const streamingData = streamRes.streaming.results;
+      const countryCode = streamRes.country.code;
+      setStreamingData(
+        streamingData[countryCode] ? streamingData[countryCode] : {}
+      );
     }
     fetchStream();
   }, [movieId]);
