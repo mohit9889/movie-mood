@@ -50,7 +50,7 @@ const MovieCard = ({ movie = {} }) => {
           ))}
         </div>
         <div>
-          <span className="text-base min-h-[72px] block">
+          <span className="text-base min-h-[96px] md:min-h-[72px] block">
             {expanded
               ? overview
               : `${overview.slice(0, overviewLength)}${
