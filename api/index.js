@@ -23,3 +23,16 @@ export async function getMoviesByGenre(genreId, page) {
     console.log("Error fetching movie data:", error);
   }
 }
+
+// Function to fetch movies streaming
+export async function getMovieStreaming(movieId) {
+  try {
+    const response = await fetch(
+      `${BASE_URL}/api/getMovieStreaming?movieId=${movieId}`
+    );
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log("Error fetching movie streaming data:", error);
+  }
+}

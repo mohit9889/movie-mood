@@ -18,6 +18,7 @@ const get = (object, path, defaultValue) => {
 };
 
 export const getMovieData = (movie) => {
+  const movieId = get(movie, "id", "");
   const title = get(movie, "title", "");
   const video = get(movie, "video.key", "");
   const releaseDate = get(movie, "release_date", "");
@@ -31,6 +32,7 @@ export const getMovieData = (movie) => {
   const overview = get(movie, "overview", "");
 
   return {
+    movieId,
     title,
     video,
     releaseYear,
