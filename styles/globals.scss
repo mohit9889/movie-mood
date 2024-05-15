@@ -19,5 +19,16 @@
   }
 }
 
+// hide scroll bar
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
+.scrollable-content {
+  -ms-overflow-style: none;
+}
+.scrollable-content {
+  scrollbar-width: none;
+}
+
 // components
 @import "./components/Icons.scss";

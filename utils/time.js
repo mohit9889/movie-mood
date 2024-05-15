@@ -1,4 +1,7 @@
 export const convertMinutesToHoursAndMinutes = (minutes) => {
+  if (minutes === 0) {
+    return "";
+  }
   if (isNaN(minutes)) {
     throw new Error("Input must be a number");
   }

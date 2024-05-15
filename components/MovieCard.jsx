@@ -56,10 +56,14 @@ const MovieCard = ({ movie = {} }) => {
       </div>
       <div className="flex flex-col p-4">
         <h1 className=" text-xl font-bold mb-3">{title}</h1>
-        <div className="flex text-sm mb-2">
+        <div className="flex text-sm mb-2 flex-wrap">
           <span>{releaseYear}</span>
-          <span className="mx-2">|</span>
-          <span>{movieRuntime}</span>
+          {movieRuntime ? (
+            <>
+              <span className="mx-2">|</span>
+              <span>{movieRuntime}</span>
+            </>
+          ) : null}
           <span className="mx-2">|</span>
           <span>{rating}/10</span>
           {Object.keys(streamingData).length && (
@@ -78,7 +82,7 @@ const MovieCard = ({ movie = {} }) => {
           {genres.map((_g) => (
             <div
               key={_g.id}
-              className="border-green border-[1px] px-2 py-1 rounded-full text-green"
+              className="border-green border-[1px] px-2 py-1 rounded-full text-green whitespace-nowrap"
             >
               {_g.name}
             </div>

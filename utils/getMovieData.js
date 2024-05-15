@@ -36,7 +36,7 @@ export const getMovieData = (movie) => {
     title,
     video,
     releaseYear,
-    movieRuntime: `${hours}H ${minutes}Mins`,
+    movieRuntime: runtime ? `${hours}H ${minutes}Mins` : "",
     rating,
     genres,
     overview,

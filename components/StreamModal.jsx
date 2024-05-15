@@ -39,7 +39,7 @@ const StreamModal = ({ streamingData = {}, closeModal = () => {} }) => {
         {streamingData.flatrate && (
           <div className="flex flex-col mb-4">
             <h6 className=" font-semibold text-base mb-2">Available</h6>
-            <div className="flex overflow-auto gap-2">
+            <div className="flex overflow-auto gap-2 scrollbar-hidden">
               {streamingData.flatrate.map((item, index) => (
                 <StreamPill key={index} item={item} />
               ))}
@@ -49,7 +49,7 @@ const StreamModal = ({ streamingData = {}, closeModal = () => {} }) => {
         {streamingData.buy && (
           <div className="flex flex-col mb-4">
             <h6 className=" font-semibold text-base mb-2">Buy</h6>
-            <div className="flex overflow-auto gap-2">
+            <div className="flex overflow-auto gap-2 scrollbar-hidden">
               {streamingData.buy.map((item, index) => (
                 <StreamPill key={index} item={item} />
               ))}
@@ -58,8 +58,8 @@ const StreamModal = ({ streamingData = {}, closeModal = () => {} }) => {
         )}
         {streamingData.rent && (
           <div className="flex flex-col mb-4">
-            <h6 className=" font-semibold text-base mb-2">Rent</h6>
-            <div className="flex overflow-auto gap-2">
+            <h6 className=" font-semibold text-base mb-2 ">Rent</h6>
+            <div className="flex overflow-auto gap-2 scrollbar-hidden">
               {streamingData.rent.map((item, index) => (
                 <StreamPill key={index} item={item} />
               ))}

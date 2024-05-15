@@ -71,7 +71,7 @@ const Header = () => {
         </Link>
       </div>
       <div className="flex w-1/2 justify-center items-center">
-        <span className="text-xl font-semibold">{mood}</span>
+        <span className="text-xl font-semibold text-center">{mood}</span>
       </div>
       <div className="flex w-1/4 justify-end">{renderThemeChanger()}</div>
     </div>
