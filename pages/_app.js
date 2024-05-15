@@ -42,7 +42,7 @@ function AppContent({ Component, pageProps, routeChangeLoading }) {
   const { isLoading } = useLoading();
 
   return (
-    <MainLayout loading={isLoading}>
+    <MainLayout loading={isLoading || routeChangeLoading}>
       {(isLoading || routeChangeLoading) && <FullPageLoader />}
       <Component {...pageProps} />
     </MainLayout>
