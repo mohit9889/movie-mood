@@ -70,7 +70,7 @@ const MovieCard = ({ movie = {} }) => {
           ) : null}
           <span className="mx-2">|</span>
           <span>{rating}/10</span>
-          {Object.keys(streamingData).length && (
+          {Object.keys(streamingData).length ? (
             <>
               <span className="mx-2">|</span>
               <span
@@ -80,7 +80,7 @@ const MovieCard = ({ movie = {} }) => {
                 See Steaming
               </span>
             </>
-          )}
+          ) : null}
         </div>
         <div className="flex gap-3 text-xs mb-4 overflow-auto">
           {genres.map((_g) => (
