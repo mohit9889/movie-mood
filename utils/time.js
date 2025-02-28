@@ -1,9 +1,9 @@
 export const convertMinutesToHoursAndMinutes = (minutes) => {
   if (minutes === 0) {
-    return "";
+    return '';
   }
   if (isNaN(minutes)) {
-    throw new Error("Input must be a number");
+    throw new Error('Input must be a number');
   }
 
   const hours = Math.floor(minutes / 60);

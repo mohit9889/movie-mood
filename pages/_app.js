@@ -1,10 +1,10 @@
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import MainLayout from "~/layouts/MainLayout";
-import FullPageLoader from "~/components/FullPageLoader";
-import { ThemesProvider } from "~/context/themesContext";
-import { LoadingProvider, useLoading } from "~/context/loadingContext";
-import "~/styles/globals.scss";
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import MainLayout from '~/layouts/MainLayout';
+import FullPageLoader from '~/components/FullPageLoader';
+import { ThemesProvider } from '~/context/themesContext';
+import { LoadingProvider, useLoading } from '~/context/loadingContext';
+import '~/styles/globals.scss';
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
@@ -14,14 +14,14 @@ export default function App({ Component, pageProps }) {
     const handleStart = () => setRouteChangeLoading(true);
     const handleComplete = () => setRouteChangeLoading(false);
 
-    router.events.on("routeChangeStart", handleStart);
-    router.events.on("routeChangeComplete", handleComplete);
-    router.events.on("routeChangeError", handleComplete);
+    router.events.on('routeChangeStart', handleStart);
+    router.events.on('routeChangeComplete', handleComplete);
+    router.events.on('routeChangeError', handleComplete);
 
     return () => {
-      router.events.off("routeChangeStart", handleStart);
-      router.events.off("routeChangeComplete", handleComplete);
-      router.events.off("routeChangeError", handleComplete);
+      router.events.off('routeChangeStart', handleStart);
+      router.events.off('routeChangeComplete', handleComplete);
+      router.events.off('routeChangeError', handleComplete);
     };
   }, [router]);
 

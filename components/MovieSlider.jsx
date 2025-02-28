@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
-import MovieCard from "./MovieCard";
-import { useLoading } from "~/context/loadingContext";
-import { getMoviesByGenre } from "~/api";
+import { useState, useEffect, useCallback } from 'react';
+import MovieCard from './MovieCard';
+import { useLoading } from '~/context/loadingContext';
+import { getMoviesByGenre } from '~/api';
 
 const MovieSlider = ({ genreId, movies }) => {
   const [moviesData, setMoviesData] = useState(movies);
@@ -9,53 +9,67 @@ const MovieSlider = ({ genreId, movies }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const { setIsLoading } = useLoading();
 
-  const nextSlide = async () => {
-    if (currentIndex === moviesData.length - 1) {
-      try {
+  /**
+   * Handles fetching and updating the movie list when reaching the last slide.
+   */
+  const nextSlide = useCallback(async () => {
+    setCurrentIndex((prevIndex) => {
+      if (prevIndex === moviesData.length - 1) {
+        // Fetch next page if at the last slide
         setIsLoading(true);
-        const newMovies = await getMoviesByGenre(genreId, currentPage + 1);
-        if (newMovies.results.length > 0) {
-          setCurrentPage(currentPage + 1);
-          setMoviesData((prevMovies) => [...prevMovies, ...newMovies.results]);
-        }
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error fetching next page:", error);
-        setIsLoading(false);
+        getMoviesByGenre(genreId, currentPage + 1)
+          .then((newMovies) => {
+            if (newMovies.results.length > 0) {
+              setCurrentPage((prevPage) => prevPage + 1);
+              setMoviesData((prevMovies) => [
+                ...prevMovies,
+                ...newMovies.results,
+              ]);
+            }
+          })
+          .catch((error) => console.error('Error fetching next page:', error))
+          .finally(() => setIsLoading(false));
       }
-    }
-    setCurrentIndex((prevIndex) => prevIndex + 1);
-  };
+      return prevIndex + 1;
+    });
+  }, [moviesData.length, genreId, currentPage, setIsLoading]);
 
-  const prevSlide = () => {
+  /**
+   * Handles moving to the previous movie slide.
+   */
+  const prevSlide = useCallback(() => {
     setCurrentIndex((prevIndex) =>
       prevIndex === 0 ? moviesData.length - 1 : prevIndex - 1
     );
-  };
+  }, [moviesData.length]);
 
+  /**
+   * Adds keyboard navigation for left (prev) and right (next) arrow keys.
+   */
   useEffect(() => {
     const handleKeyDown = (event) => {
-      if (event.keyCode === 39) {
-        nextSlide(); // Right arrow key
-      } else if (event.keyCode === 37) {
-        prevSlide(); // Left arrow key
+      if (event.key === 'ArrowRight') {
+        nextSlide();
+      } else if (event.key === 'ArrowLeft') {
+        prevSlide();
       }
     };
 
-    document.addEventListener("keydown", handleKeyDown);
-
+    document.addEventListener('keydown', handleKeyDown);
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [currentIndex]);
+  }, [nextSlide, prevSlide]);
 
   return (
-    <div className="card card-compact md:card-normal w-full md:w-[40rem] bg-secondary rounded-xl shadow-xl mx-auto pb-4">
+    <div className="card card-compact md:card-normal mx-auto w-full rounded-xl bg-secondary pb-4 shadow-xl md:w-[40rem]">
       <MovieCard movie={moviesData[currentIndex]} />
-      <div className="px-4 flex justify-between">
+      <div className="flex justify-between px-4">
         <button
-          className={`bg-green opacity-85 hover:opacity-100 text-white px-6 py-2 rounded-lg ${
-            currentIndex === 0 ? "!bg-black-secondary !opacity-30" : ""
+          className={`rounded-lg bg-green px-6 py-2 text-white opacity-85 hover:opacity-100 ${
+            currentIndex === 0
+              ? 'cursor-not-allowed !bg-black-secondary !opacity-30'
+              : ''
           }`}
           onClick={prevSlide}
           disabled={currentIndex === 0}
@@ -63,7 +77,7 @@ const MovieSlider = ({ genreId, movies }) => {
           Prev
         </button>
         <button
-          className="bg-green opacity-85 hover:opacity-100 text-white px-6 py-2 rounded-lg"
+          className="rounded-lg bg-green px-6 py-2 text-white opacity-85 hover:opacity-100"
           onClick={nextSlide}
         >
           Next

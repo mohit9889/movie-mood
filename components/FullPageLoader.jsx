@@ -1,10 +1,14 @@
 const FullPageLoader = () => {
   return (
     <div
-      className={`absolute z-50 w-full h-screen text-white backdrop-blur top-0 left-0  flex items-center justify-center flex-col`}
+      className="fixed inset-0 z-50 flex h-screen w-full flex-col items-center justify-center bg-black/50 backdrop-blur"
+      aria-live="polite"
     >
-      <div className="rounded-full h-20 w-20 bg-green animate-ping"></div>
-      <p className="text-center text-xl max-w-[100%]  md:max-w-[40%] text-typography font-semibold absolute">
+      {/* Animated Loader */}
+      <div className="border-gray-300 size-16 animate-spin rounded-full border-4 border-t-green"></div>
+
+      {/* Loading Text */}
+      <p className="mt-4 max-w-md px-4 text-center text-lg font-semibold text-typography">
         Loading... Just like popcorn popping, great movies take time. Sit tight
         and get ready to laugh your socks off!
       </p>

@@ -1,21 +1,20 @@
-import MovieSlider from "~/components/MovieSlider";
-import { getMoviesByGenre } from "~/api/index";
-import Link from "next/link";
-import SEO from "~/components/SEO";
-import { moviePage } from "~/constants/seoData";
-import LeftArrowSvg from "~/public/svgs/left-arrow.svg";
+import MovieSlider from '~/components/MovieSlider';
+import { getMoviesByGenre } from '~/api';
+import Link from 'next/link';
+import SEO from '~/components/SEO';
+import { moviePage } from '~/constants/seoData';
+import LeftArrowSvg from '~/public/svgs/left-arrow.svg';
 
 const Movies = ({ genreId, movies = [] }) => {
   return (
     <>
-      <SEO {...{ ...moviePage }} />
+      <SEO {...moviePage} />
 
-      <div className="flex flex-col">
-        <div className="w-full md:w-[40rem] mx-auto mb-4">
+      <div className="flex flex-col items-center">
+        <div className="mb-4 w-full md:w-[40rem]">
           <Link
-            className="bg-green py-2 px-3 text-sm font-medium text-white rounded-lg flex w-max items-center opacity-85 hover:opacity-100"
             href="/"
-            as="/"
+            className="flex w-max items-center rounded-lg bg-green px-3 py-2 text-sm font-medium text-white opacity-85 hover:opacity-100"
           >
             <span className="icon-12 icon-white mr-1">
               <LeftArrowSvg />
@@ -23,34 +22,37 @@ const Movies = ({ genreId, movies = [] }) => {
             Change Mood
           </Link>
         </div>
+
         {movies.length > 0 ? (
           <MovieSlider genreId={genreId} movies={movies} />
         ) : (
-          <p>No Data</p>
+          <p className="text-gray-500">No movies available.</p>
         )}
       </div>
     </>
   );
 };
 
-export async function getServerSideProps(ctx) {
-  const {
-    query: { movies },
-  } = ctx;
-  const splitUrl = movies.split("-");
-  const genreId = splitUrl[splitUrl.length - 1];
-  const response = await getMoviesByGenre(genreId, 1);
+export async function getServerSideProps({ query }) {
+  try {
+    const genreId = query.movies?.split('-').pop();
+    if (!genreId) throw new Error('Invalid genre ID');
 
-  if (response.status === 404) {
+    const response = await getMoviesByGenre(genreId, 1);
+    if (!response || !response.results) {
+      throw new Error('Invalid API response');
+    }
+
+    return { props: { genreId, movies: response.results } };
+  } catch (error) {
+    console.error('Error fetching movies:', error);
     return {
       redirect: {
-        destination: "/404",
+        destination: '/404',
         permanent: false,
       },
     };
   }
-
-  return { props: { genreId, movies: response.results } };
 }
 
 export default Movies;

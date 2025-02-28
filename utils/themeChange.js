@@ -1,3 +1,3 @@
 export const changeTheme = (theme) => {
-  document.querySelector("html")?.setAttribute("data-theme", theme);
+  document.querySelector('html')?.setAttribute('data-theme', theme);
 };

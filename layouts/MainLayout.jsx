@@ -1,25 +1,23 @@
-import React from "react";
-import Header from "./Header";
-import { Nunito } from "next/font/google";
+import React from 'react';
+import Header from './Header';
+import { Nunito } from 'next/font/google';
 
 const nunito = Nunito({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-nunito",
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-nunito',
 });
 
 const MainLayout = ({ children, loading }) => {
   return (
     <div
-      className={`bg-primary text-typography ${
-        loading ? "relative overflow-hidden h-screen" : ""
+      className={`bg-primary text-typography ${nunito.variable} min-h-screen w-full font-sans ${
+        loading ? 'relative h-screen overflow-hidden' : ''
       }`}
     >
-      <div
-        className={`${nunito.variable} font-sans min-h-screen w-full p-2 lg:p-6 max-w-4xl mx-auto`}
-      >
+      <div className="mx-auto max-w-4xl p-2 lg:p-6">
         <Header />
-        {children}
+        <main>{children}</main>
       </div>
     </div>
   );

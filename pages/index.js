@@ -1,47 +1,46 @@
-import Link from "next/link";
-import SEO from "~/components/SEO";
-import { homePage } from "~/constants/seoData";
-import { movieMood } from "~/constants/movieMood";
-import { getMovieGenres } from "~/api";
-import { saveToSessionStorage } from "~/utils/sessionStorage";
+import Link from 'next/link';
+import SEO from '~/components/SEO';
+import { homePage } from '~/constants/seoData';
+import { movieMood } from '~/constants/movieMood';
+import { getMovieGenres } from '~/api';
+import { saveToSessionStorage } from '~/utils/sessionStorage';
 
-const Home = ({ genres }) => {
+const Home = ({ genres = [] }) => {
   return (
     <>
-      <SEO {...{ ...homePage }} />
+      <SEO {...homePage} />
       <div>
-        <h1 className="text-center font-bold text-4xl mb-6">
+        <h1 className="mb-6 text-center text-4xl font-bold">
           Laugh, Cry, Scream: Movies for Every Mood at MoodFlicks
         </h1>
         <h2 className="mb-4 text-center text-lg">
           Select Your State of Mind, We'll Handle the Rest
         </h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-          {genres && genres.length
-            ? genres.map((_g) => (
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
+          {genres.length > 0 ? (
+            genres.map(({ id, name }) => {
+              const moodName = movieMood[name] || name;
+              const formattedMood = moodName.split(' ')[1] || moodName;
+              const slug = `${formattedMood.replace(' ', '_').toLowerCase()}-${id}`;
+
+              return (
                 <Link
-                  key={_g.id}
-                  href="/movies/[movies]"
-                  as={`/movies/${(movieMood[_g.name]
-                    ? movieMood[_g.name].split(" ")[1]
-                    : _g.name
-                  )
-                    .replace(" ", "_")
-                    .toLowerCase()}-${_g.id}`}
-                  title={_g.name}
-                  onClick={() =>
-                    saveToSessionStorage(
-                      "current_mood",
-                      movieMood[_g.name] ? movieMood[_g.name] : _g.name
-                    )
-                  }
+                  key={id}
+                  href={`/movies/${slug}`}
+                  title={name}
+                  onClick={() => saveToSessionStorage('current_mood', moodName)}
                 >
-                  <div className="h-[4rem] px-[1.5rem] text-lg border-green border-2 flex items-center justify-center rounded-lg hover:text-white hover:bg-green cursor-pointer transition-colors duration-300 ease-in-out">
-                    {movieMood[_g.name] ? movieMood[_g.name] : _g.name}
+                  <div className="flex h-16 cursor-pointer items-center justify-center rounded-lg border-2 border-green px-6 text-lg transition-colors duration-300 ease-in-out hover:bg-green hover:text-white">
+                    {moodName}
                   </div>
                 </Link>
-              ))
-            : null}
+              );
+            })
+          ) : (
+            <p className="text-gray-500 col-span-2 text-center md:col-span-4">
+              No genres available.
+            </p>
+          )}
         </div>
       </div>
     </>
@@ -49,16 +48,23 @@ const Home = ({ genres }) => {
 };
 
 export async function getServerSideProps() {
-  const res = await getMovieGenres();
-  if (res.status === 404) {
+  try {
+    const res = await getMovieGenres();
+
+    if (!res || !res.genres) {
+      throw new Error('Invalid response from API');
+    }
+
+    return { props: { genres: res.genres } };
+  } catch (error) {
+    console.error('Error fetching movie genres:', error);
     return {
       redirect: {
-        destination: "/404",
+        destination: '/404',
         permanent: false,
       },
     };
   }
-  return { props: { genres: res.genres } };
 }
 
 export default Home;

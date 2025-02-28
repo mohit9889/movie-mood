@@ -1,24 +1,23 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
-const useIsMobile = () => {
-  const [isMobile, setIsMobile] = useState(false);
+const useIsMobile = (breakpoint = 768) => {
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth < breakpoint : false
+  );
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768); // Change 768 to your desired breakpoint for mobile devices
-    };
+    if (typeof window === 'undefined') return;
 
-    // Initial check on mount
+    const mediaQuery = window.matchMedia(`(max-width: ${breakpoint}px)`);
+    const handleResize = () => setIsMobile(mediaQuery.matches);
+
+    // Initial check & event listener
     handleResize();
-
-    // Event listener for window resize
-    window.addEventListener("resize", handleResize);
+    mediaQuery.addEventListener('change', handleResize);
 
     // Cleanup function
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+    return () => mediaQuery.removeEventListener('change', handleResize);
+  }, [breakpoint]);
 
   return isMobile;
 };
