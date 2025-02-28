@@ -1,35 +1,29 @@
 import MovieSlider from '~/components/MovieSlider';
 import { getMoviesByGenre } from '~/api';
 import Link from 'next/link';
-import SEO from '~/components/SEO';
-import { moviePage } from '~/constants/seoData';
 import LeftArrowSvg from '~/public/svgs/left-arrow.svg';
 
 const Movies = ({ genreId, movies = [] }) => {
   return (
-    <>
-      <SEO {...moviePage} />
-
-      <div className="flex flex-col items-center">
-        <div className="mb-4 w-full md:w-[40rem]">
-          <Link
-            href="/"
-            className="flex w-max items-center rounded-lg bg-green px-3 py-2 text-sm font-medium text-white opacity-85 hover:opacity-100"
-          >
-            <span className="icon-12 icon-white mr-1">
-              <LeftArrowSvg />
-            </span>
-            Change Mood
-          </Link>
-        </div>
-
-        {movies.length > 0 ? (
-          <MovieSlider genreId={genreId} movies={movies} />
-        ) : (
-          <p className="text-gray-500">No movies available.</p>
-        )}
+    <div className="flex flex-col items-center">
+      <div className="mb-4 w-full md:w-[40rem]">
+        <Link
+          href="/"
+          className="flex w-max items-center rounded-lg bg-green px-3 py-2 text-sm font-medium text-white opacity-85 hover:opacity-100"
+        >
+          <span className="icon-12 icon-white mr-1">
+            <LeftArrowSvg />
+          </span>
+          Change Mood
+        </Link>
       </div>
-    </>
+
+      {movies.length > 0 ? (
+        <MovieSlider genreId={genreId} movies={movies} />
+      ) : (
+        <p className="text-gray-500">No movies available.</p>
+      )}
+    </div>
   );
 };
 

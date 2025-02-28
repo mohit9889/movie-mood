@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import Head from 'next/head';
 import StreamModal from './StreamModal';
-import YoutubeVideo from '~/components/Youtube';
+import YoutubeVideo from './Youtube';
 import Modal from './Modal';
+import SEO from './SEO';
 import useModal from '~/hooks/useModal';
 import useIsMobile from '~/hooks/useIsMobile';
 import { getMovieData } from '~/utils/getMovieData';
@@ -61,12 +61,51 @@ const MovieCard = ({ movie = {} }) => {
     fetchStream();
   }, [movieId]);
 
+  // Generate Schema Data
+  const movieSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Movie',
+    name: title,
+    description: overview,
+    datePublished: releaseYear,
+    duration: movieRuntime ? `PT${movieRuntime}M` : undefined,
+    aggregateRating: rating
+      ? {
+          '@type': 'AggregateRating',
+          ratingValue: rating,
+          bestRating: '10',
+          worstRating: '0',
+          ratingCount: '1000',
+        }
+      : undefined,
+    genre: genres.map((genre) => genre.name),
+    trailer: video
+      ? {
+          '@type': 'VideoObject',
+          name: `${title} Official Trailer`,
+          embedUrl: `https://www.youtube.com/embed/${video}`,
+          thumbnailUrl: `https://img.youtube.com/vi/${video}/hqdefault.jpg`,
+        }
+      : undefined,
+    offers: {
+      '@type': 'Offer',
+      url: `${process.env.BASE_URL}/movies/${movieId}`,
+      price: '0',
+      priceCurrency: 'USD',
+      availability: 'https://schema.org/InStock',
+      seller: {
+        '@type': 'Organization',
+        name: 'MoodFlicks',
+      },
+    },
+  };
+
   return (
     <>
       {/* SEO Metadata */}
-      <Head>
-        <meta name="keywords" content={newSeoKeywords} />
-      </Head>
+      <SEO
+        {...{ ...moviePage, keywords: newSeoKeywords, schemaData: movieSchema }}
+      />
 
       {/* Movie Trailer */}
       <div className="w-full">

@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
-const SEO = ({ title, description, ogImage, keywords }) => {
+const SEO = ({ title, description, ogImage, keywords, schemaData }) => {
   const router = useRouter();
   const ogUrl = process.env.BASE_URL + router.asPath;
 
@@ -18,6 +18,11 @@ const SEO = ({ title, description, ogImage, keywords }) => {
       <meta property="og:image" content={ogImage} />
       <meta property="og:url" content={ogUrl} />
       <meta property="og:type" content="website" />
+
+      {/* JSON-LD Structured Data */}
+      {schemaData && (
+        <script type="application/ld+json">{JSON.stringify(schemaData)}</script>
+      )}
     </Head>
   );
 };

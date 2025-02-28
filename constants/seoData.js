@@ -7,6 +7,27 @@ export const homePage = {
   keywords:
     'Discover movies based on your mood, Watch films online, Find exciting action movies, Explore heartwarming family favorites, Browse thrillers, comedies, dramas, and more, Your one-stop destination for cinematic entertainment, Personalized movie recommendations, Dive into a world of movie magic, movies online,watch films, movie genres, cinematic entertainment',
   ogImage: `${BASE_URL}/img/logo.png`,
+  schemaData: {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Movie Mood',
+    url: BASE_URL,
+    description:
+      'Discover movies based on your mood. Watch films online and find exciting action movies, heartwarming family favorites, thrillers, comedies, and more.',
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${BASE_URL}/search?q={search_term_string}`,
+      'query-input': 'required name=search_term_string',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Movie Mood',
+      logo: {
+        '@type': 'ImageObject',
+        url: `${BASE_URL}/img/logo.png`,
+      },
+    },
+  },
 };
 
 export const pageNotFound = {
@@ -16,6 +37,23 @@ export const pageNotFound = {
   keywords:
     'Explore our movie categories, Find films based on your mood, Discover new favorites, Cinematic entertainment for every mood, Browse our extensive movie collection, Personalized movie recommendations, Your destination for movie magic, movies categorized by mood, cinematic entertainment, personalized movie recommendations, find films',
   ogImage: `${BASE_URL}/img/logo.png`,
+  schemaData: {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: '404 - Page Not Found',
+    description:
+      'Oops! The page you are looking for does not exist. Explore our other movie categories to find something interesting.',
+    url: `${BASE_URL}/404`,
+    isPartOf: {
+      '@type': 'WebSite',
+      name: 'Movie Mood',
+      url: BASE_URL,
+    },
+    about: {
+      '@type': 'Thing',
+      name: 'Movies, Film Categories, Entertainment',
+    },
+  },
 };
 
 export const moviePage = {
