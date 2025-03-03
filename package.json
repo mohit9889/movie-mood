@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "analyze": "ANALYZE=true npm run build",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "format": "prettier --write .",
@@ -27,6 +28,7 @@
     ]
   },
   "dependencies": {
+    "@next/bundle-analyzer": "^15.2.0",
     "@vercel/speed-insights": "^1.2.0",
     "next": "14.2.3",
     "react": "^18",

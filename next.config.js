@@ -1,6 +1,9 @@
 const path = require('path');
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
 
-module.exports = {
+const nextConfig = {
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')],
   },
@@ -24,3 +27,5 @@ module.exports = {
     domains: ['image.tmdb.org'],
   },
 };
+
+module.exports = withBundleAnalyzer(nextConfig);

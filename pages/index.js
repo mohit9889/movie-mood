@@ -47,22 +47,23 @@ const Home = ({ genres = [] }) => {
   );
 };
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   try {
     const res = await getMovieGenres();
 
-    if (!res || !res.genres) {
+    if (!res?.genres || res.genres.length === 0) {
       throw new Error('Invalid response from API');
     }
 
-    return { props: { genres: res.genres } };
+    return {
+      props: { genres: res.genres },
+      revalidate: 86400, // Re-generate the page every 24 hours (1 day)
+    };
   } catch (error) {
     console.error('Error fetching movie genres:', error);
     return {
-      redirect: {
-        destination: '/404',
-        permanent: false,
-      },
+      props: { genres: [] },
+      revalidate: 86400,
     };
   }
 }
