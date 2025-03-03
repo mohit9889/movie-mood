@@ -1,41 +1,46 @@
 import { useState, useEffect, useCallback } from 'react';
 import MovieCard from './MovieCard';
-import { useLoading } from '~/context/loadingContext';
 import { getMoviesByGenre } from '~/api';
 
 const MovieSlider = ({ genreId, movies }) => {
   const [moviesData, setMoviesData] = useState(movies);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const { setIsLoading } = useLoading();
 
   /**
-   * Handles fetching and updating the movie list when reaching the last slide.
+   * Fetches the next page of movies if approaching the last few slides.
    */
-  const nextSlide = useCallback(async () => {
-    setCurrentIndex((prevIndex) => {
-      if (prevIndex === moviesData.length - 1) {
-        // Fetch next page if at the last slide
-        setIsLoading(true);
-        getMoviesByGenre(genreId, currentPage + 1)
-          .then((newMovies) => {
-            if (newMovies.results.length > 0) {
-              setCurrentPage((prevPage) => prevPage + 1);
-              setMoviesData((prevMovies) => [
-                ...prevMovies,
-                ...newMovies.results,
-              ]);
-            }
-          })
-          .catch((error) => console.error('Error fetching next page:', error))
-          .finally(() => setIsLoading(false));
+  const fetchNextPage = useCallback(async () => {
+    try {
+      const newMovies = await getMoviesByGenre(genreId, currentPage + 1);
+
+      if (newMovies.results.length > 0) {
+        setMoviesData((prevMovies) => [...prevMovies, ...newMovies.results]);
+        setCurrentPage((prevPage) => prevPage + 1);
       }
-      return prevIndex + 1;
-    });
-  }, [moviesData.length, genreId, currentPage, setIsLoading]);
+    } catch (error) {
+      console.error('Error fetching next page:', error);
+    }
+  }, [genreId, currentPage]);
 
   /**
-   * Handles moving to the previous movie slide.
+   * Moves to the next slide and prefetches more movies if close to the end.
+   */
+  const nextSlide = useCallback(() => {
+    setCurrentIndex((prevIndex) => {
+      const nextIndex = prevIndex + 1;
+
+      // Fetch next page when within 5 slides of the end
+      if (nextIndex >= moviesData.length - 5) {
+        fetchNextPage();
+      }
+
+      return nextIndex;
+    });
+  }, [moviesData.length, fetchNextPage]);
+
+  /**
+   * Moves to the previous slide.
    */
   const prevSlide = useCallback(() => {
     setCurrentIndex((prevIndex) =>

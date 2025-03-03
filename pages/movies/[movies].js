@@ -27,9 +27,9 @@ const Movies = ({ genreId, movies = [] }) => {
   );
 };
 
-export async function getServerSideProps({ query }) {
+export async function getStaticProps({ params }) {
   try {
-    const genreId = query.movies?.split('-').pop();
+    const genreId = params.movies?.split('-').pop();
     if (!genreId) throw new Error('Invalid genre ID');
 
     const response = await getMoviesByGenre(genreId, 1);
@@ -37,16 +37,21 @@ export async function getServerSideProps({ query }) {
       throw new Error('Invalid API response');
     }
 
-    return { props: { genreId, movies: response.results } };
+    return {
+      props: { genreId, movies: response.results },
+      revalidate: 86400, // Regenerate page every 24 hours
+    };
   } catch (error) {
     console.error('Error fetching movies:', error);
-    return {
-      redirect: {
-        destination: '/404',
-        permanent: false,
-      },
-    };
+    return { notFound: true };
   }
+}
+
+export async function getStaticPaths() {
+  return {
+    paths: [], // No pre-generated paths, Next.js will generate them dynamically
+    fallback: 'blocking', // Generate page on-demand if not already built
+  };
 }
 
 export default Movies;

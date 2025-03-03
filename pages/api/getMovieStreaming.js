@@ -31,15 +31,13 @@ async function fetchUserCountry() {
   const defaultCountry = { country: 'India', code: 'IN' };
 
   try {
-    const response = await fetch('https://ipapi.co/json/');
-    if (!response.ok) {
-      throw new Error('Failed to fetch country data');
-    }
+    const response = await fetch('http://ip-api.com/json/');
+    if (!response.ok) throw new Error('Failed to fetch country data');
 
     const countryData = await response.json();
     return {
-      country: countryData.country_name || defaultCountry.country,
-      code: countryData.country_code || defaultCountry.code,
+      country: countryData.country || defaultCountry.country,
+      code: countryData.countryCode || defaultCountry.code,
     };
   } catch (error) {
     console.warn(
