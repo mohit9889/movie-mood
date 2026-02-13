@@ -17,14 +17,18 @@ const nextConfig = {
     return config;
   },
   env: {
-    MOVIE_API_KEY: process.env.MOVIE_API_KEY,
+    TMDB_API_URL: process.env.TMDB_API_URL,
     BASE_URL: process.env.BASE_URL,
-  },
-  eslint: {
-    ignoreDuringBuilds: false,
+    TMDB_ACCESS_TOKEN: process.env.TMDB_ACCESS_TOKEN,
   },
   images: {
-    domains: ['image.tmdb.org'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'image.tmdb.org',
+        pathname: '**',
+      },
+    ],
   },
 };
 

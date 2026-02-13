@@ -1,5 +1,3 @@
-const BASE_URL = process.env.BASE_URL;
-
 /**
  * General method for fetching data from the API.
  * @param {string} endpoint - The API endpoint (relative to BASE_URL).
@@ -8,14 +6,24 @@ const BASE_URL = process.env.BASE_URL;
  */
 export async function fetchData(endpoint, params = {}) {
   try {
-    const url = new URL(`${BASE_URL}${endpoint}`);
+    // Only use BASE_URL if running on server or if endpoint is not relative
+    const baseURL =
+      typeof window === 'undefined'
+        ? process.env.BASE_URL || 'http://localhost:3000'
+        : '';
+    const url = new URL(
+      `${baseURL}${endpoint}`,
+      typeof window !== 'undefined'
+        ? window.location.origin
+        : 'http://localhost:3000'
+    );
 
     // Append query parameters
     Object.keys(params).forEach((key) =>
       url.searchParams.append(key, params[key])
     );
 
-    const response = await fetch(url);
+    const response = await fetch(url.toString());
     if (!response.ok) {
       throw new Error(
         `Failed to fetch: ${response.status} ${response.statusText}`

@@ -12,10 +12,13 @@ const MovieSlider = ({ genreId, movies }) => {
    */
   const fetchNextPage = useCallback(async () => {
     try {
-      const newMovies = await getMoviesByGenre(genreId, currentPage + 1);
+      // The API returns { success: true, movies: [...], total_pages: ... }
+      // So we need to access .movies, not .results
+      const data = await getMoviesByGenre(genreId, currentPage + 1);
+      const newMovies = data.movies || data.results || [];
 
-      if (newMovies.results.length > 0) {
-        setMoviesData((prevMovies) => [...prevMovies, ...newMovies.results]);
+      if (newMovies.length > 0) {
+        setMoviesData((prevMovies) => [...prevMovies, ...newMovies]);
         setCurrentPage((prevPage) => prevPage + 1);
       }
     } catch (error) {
@@ -68,7 +71,10 @@ const MovieSlider = ({ genreId, movies }) => {
 
   return (
     <div className="card card-compact md:card-normal mx-auto w-full rounded-xl bg-secondary pb-4 shadow-xl md:w-[40rem]">
-      <MovieCard movie={moviesData[currentIndex]} />
+      <MovieCard
+        key={moviesData[currentIndex]?.id}
+        movie={moviesData[currentIndex]}
+      />
       <div className="flex justify-between px-4">
         <button
           className={`rounded-lg bg-green px-6 py-2 text-white opacity-85 hover:opacity-100 ${

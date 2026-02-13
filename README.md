@@ -34,10 +34,11 @@ To get started with Movie Mood, follow these steps:
 
 4. Configure environment variables:
 
-   Create a .env file in the root directory of the project and add your TMDb API key and Base URL:
+   Create a .env file in the root directory of the project and add your TMDb Access Token and URL:
 
    ```plain text
-    MOVIE_API_KEY=your-api-key
+    TMDB_ACCESS_TOKEN=your-access-token
+    TMDB_API_URL=https://api.themoviedb.org/3
     BASE_URL=http://localhost:3000
    ```
 

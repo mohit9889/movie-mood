@@ -1,26 +1,4 @@
-const MOVIE_API_KEY = process.env.MOVIE_API_KEY;
-
-if (!MOVIE_API_KEY) {
-  throw new Error('Missing MOVIE_API_KEY in environment variables');
-}
-
-/**
- * Fetch movie genres from TMDb API.
- * @returns {Promise<Object>} - The JSON response containing movie genres.
- * @throws {Error} - If the fetch request fails.
- */
-async function fetchMovieGenres() {
-  const url = `https://api.themoviedb.org/3/genre/movie/list?api_key=${MOVIE_API_KEY}&language=en-US`;
-  const response = await fetch(url);
-
-  if (!response.ok) {
-    throw new Error(
-      `Failed to fetch movie genres: ${response.status} ${response.statusText}`
-    );
-  }
-
-  return response.json();
-}
+import { fetchMovieGenres } from '~/utils/tmdb';
 
 /**
  * API handler to fetch movie genres.

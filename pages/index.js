@@ -2,7 +2,7 @@ import Link from 'next/link';
 import SEO from '~/components/SEO';
 import { homePage } from '~/constants/seoData';
 import { movieMood } from '~/constants/movieMood';
-import { getMovieGenres } from '~/api';
+import { fetchMovieGenres } from '~/utils/tmdb';
 import { saveToSessionStorage } from '~/utils/sessionStorage';
 
 const Home = ({ genres = [] }) => {
@@ -49,7 +49,7 @@ const Home = ({ genres = [] }) => {
 
 export async function getStaticProps() {
   try {
-    const res = await getMovieGenres();
+    const res = await fetchMovieGenres();
 
     if (!res?.genres || res.genres.length === 0) {
       throw new Error('Invalid response from API');

@@ -7,7 +7,7 @@ import useModal from '~/hooks/useModal';
 import useIsMobile from '~/hooks/useIsMobile';
 import { getMovieData } from '~/utils/getMovieData';
 import { moviePage } from '~/constants/seoData';
-import { getMovieStreaming } from '~/api';
+import { getMovieDetails } from '~/api';
 
 const MovieCard = ({ movie = {} }) => {
   // Detect mobile view
@@ -18,9 +18,9 @@ const MovieCard = ({ movie = {} }) => {
   const {
     movieId,
     title,
-    video,
+    video: initialVideo,
     releaseYear,
-    movieRuntime,
+    movieRuntime: initialRuntime,
     rating,
     genres = [],
     overview = '',
@@ -29,6 +29,8 @@ const MovieCard = ({ movie = {} }) => {
   // Local state for expanded overview and streaming data
   const [expanded, setExpanded] = useState(false);
   const [streamingData, setStreamingData] = useState({});
+  const [video, setVideo] = useState(initialVideo);
+  const [movieRuntime, setMovieRuntime] = useState(initialRuntime);
 
   // Custom hook to handle modal state
   const { isOpen, openModal, closeModal } = useModal();
@@ -42,23 +44,44 @@ const MovieCard = ({ movie = {} }) => {
   const genreNames = genres.map((item) => item.name).join(', ');
   const newSeoKeywords = `${moviePage.keywords}, ${genreNames}`;
 
-  // Fetch streaming data when movieId changes
+  // Fetch movie details (streaming, runtime, video) when movieId changes
   useEffect(() => {
     if (!movieId) return;
 
-    const fetchStream = async () => {
+    const fetchDetails = async () => {
       try {
-        const streamRes = await getMovieStreaming(movieId);
-        const countryCode = streamRes?.country?.code;
-        const availableStreams =
-          streamRes?.streaming?.results?.[countryCode] || {};
+        const details = await getMovieDetails(movieId);
+
+        // Update streaming data
+        const countryCode = details?.country?.code || 'IN';
+        const results = details['watch/providers']?.results || {};
+        const availableStreams = results[countryCode] || {};
         setStreamingData(availableStreams);
+
+        // Update video if not present initially
+        if (!video && details.videos) {
+          const trailer =
+            details.videos.results.find(
+              (result) => result.type === 'Trailer'
+            ) || details.videos.results[0];
+          if (trailer) {
+            setVideo(trailer.key);
+          }
+        }
+
+        // Update runtime if not present initially
+        if (!movieRuntime && details.runtime) {
+          const hours = Math.floor(details.runtime / 60);
+          const minutes = details.runtime % 60;
+          setMovieRuntime(`${hours}H ${minutes}Mins`);
+        }
       } catch (error) {
-        console.error('Error fetching streaming data:', error);
+        console.error('Error fetching movie details:', error);
       }
     };
 
-    fetchStream();
+    fetchDetails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [movieId]);
 
   // Generate Schema Data

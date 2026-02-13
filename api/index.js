@@ -26,3 +26,12 @@ export function getMoviesByGenre(genreId, page) {
 export function getMovieStreaming(movieId) {
   return fetchData('/api/getMovieStreaming', { movieId });
 }
+
+/**
+ * Fetches details for a specific movie including videos and providers.
+ * @param {number} movieId - The ID of the movie.
+ * @returns {Promise<Object>} A promise that resolves to the movie's details.
+ */
+export function getMovieDetails(movieId) {
+  return fetchData('/api/getMovieDetails', { movieId });
+}

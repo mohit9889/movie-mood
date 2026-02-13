@@ -5,12 +5,13 @@ if (!TMDB_ACCESS_TOKEN) {
 }
 
 /**
- * Fetches movie streaming providers from TMDb.
+ * Fetch movie details, videos, and watch providers in a single call.
  * @param {string} movieId - The movie ID.
- * @returns {Promise<Object>} - The JSON response containing streaming providers.
+ * @returns {Promise<Object>} - The JSON response containing movie details.
  */
-async function fetchStreamingProviders(movieId) {
-  const url = `${process.env.TMDB_API_URL}/movie/${movieId}/watch/providers`;
+async function fetchMovieDetails(movieId) {
+  const url = `${process.env.TMDB_API_URL}/movie/${movieId}?append_to_response=videos,watch/providers&language=en-US`;
+
   const response = await fetch(url, {
     headers: {
       Authorization: `Bearer ${TMDB_ACCESS_TOKEN}`,
@@ -20,7 +21,7 @@ async function fetchStreamingProviders(movieId) {
 
   if (!response.ok) {
     throw new Error(
-      `Failed to fetch movie streaming data: ${response.status} ${response.statusText}`
+      `Failed to fetch movie details: ${response.status} ${response.statusText}`
     );
   }
 
@@ -53,12 +54,6 @@ async function fetchUserCountry() {
   }
 }
 
-/**
- * API handler to fetch movie streaming providers based on movie ID.
- * Determines the user's country using IP geolocation.
- * @param {import('next').NextApiRequest} req - The request object.
- * @param {import('next').NextApiResponse} res - The response object.
- */
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
     return res
@@ -74,17 +69,14 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Fetch streaming providers and user country in parallel
-    const [streamingData, userCountry] = await Promise.all([
-      fetchStreamingProviders(movieId),
+    const [movieData, userCountry] = await Promise.all([
+      fetchMovieDetails(movieId),
       fetchUserCountry(),
     ]);
 
-    res
-      .status(200)
-      .json({ success: true, streaming: streamingData, country: userCountry });
+    res.status(200).json({ success: true, ...movieData, country: userCountry });
   } catch (error) {
-    console.error('Error fetching movie streaming data:', error);
+    console.error('Error fetching movie details:', error);
     res.status(500).json({
       success: false,
       error: error.message || 'Internal Server Error',

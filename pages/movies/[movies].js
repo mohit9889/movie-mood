@@ -1,5 +1,5 @@
 import MovieSlider from '~/components/MovieSlider';
-import { getMoviesByGenre } from '~/api';
+import { fetchMoviesByGenre } from '~/utils/tmdb';
 import Link from 'next/link';
 import LeftArrowSvg from '~/public/svgs/left-arrow.svg';
 
@@ -32,7 +32,7 @@ export async function getStaticProps({ params }) {
     const genreId = params.movies?.split('-').pop();
     if (!genreId) throw new Error('Invalid genre ID');
 
-    const response = await getMoviesByGenre(genreId, 1);
+    const response = await fetchMoviesByGenre(genreId, 1);
     if (!response || !response.results) {
       throw new Error('Invalid API response');
     }
