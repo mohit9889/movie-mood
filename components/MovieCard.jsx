@@ -7,7 +7,7 @@ import useModal from '~/hooks/useModal';
 import useIsMobile from '~/hooks/useIsMobile';
 import { getMovieData } from '~/utils/getMovieData';
 import { moviePage } from '~/constants/seoData';
-import { getMovieDetails } from '~/api';
+import { getMovieDetails } from '~/services';
 
 const MovieCard = ({ movie = {} }) => {
   // Detect mobile view

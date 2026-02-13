@@ -1,5 +1,9 @@
-# Allow all crawlers
+# *
 User-agent: *
 Allow: /
 
-Sitemap: https://www.moviemood.fun/sitemap.xml
+# Host
+Host: http://localhost:3000
+
+# Sitemaps
+Sitemap: http://localhost:3000/sitemap.xml

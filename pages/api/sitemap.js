@@ -1,4 +1,4 @@
-import { getMovieGenres } from '~/api';
+import { getMovieGenres } from '~/services';
 import { movieMood } from '~/constants/movieMood';
 
 export default async function handler(req, res) {

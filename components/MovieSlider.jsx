@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import MovieCard from './MovieCard';
-import { getMoviesByGenre } from '~/api';
+import { getMoviesByGenre } from '~/services';
 
 const MovieSlider = ({ genreId, movies }) => {
   const [moviesData, setMoviesData] = useState(movies);
