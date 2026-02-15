@@ -2,10 +2,14 @@ import MovieSlider from '~/components/MovieSlider';
 import { fetchMoviesByGenre } from '~/utils/tmdb';
 import Link from 'next/link';
 import LeftArrowSvg from '~/public/svgs/left-arrow.svg';
+import SEO from '~/components/SEO';
+import { getMoviePageSeo } from '~/constants/seoData';
+import { movieMood } from '~/constants/movieMood';
 
-const Movies = ({ genreId, movies = [] }) => {
+const Movies = ({ genreId, movies = [], seoData }) => {
   return (
     <div className="flex flex-col items-center">
+      {seoData && <SEO {...seoData} />}
       <div className="mb-4 w-full md:w-[40rem]">
         <Link
           href="/"
@@ -37,8 +41,15 @@ export async function getStaticProps({ params }) {
       throw new Error('Invalid API response');
     }
 
+    // Extract genre name from first movie result or fallback
+    const genreName =
+      response.results[0]?.genres.find((g) => g.id.toString() === genreId)
+        ?.name || 'Movies';
+    const moodName = movieMood[genreName] || genreName;
+    const seoData = getMoviePageSeo(genreName, moodName);
+
     return {
-      props: { genreId, movies: response.results },
+      props: { genreId, movies: response.results, seoData },
       revalidate: 86400, // Regenerate page every 24 hours
     };
   } catch (error) {

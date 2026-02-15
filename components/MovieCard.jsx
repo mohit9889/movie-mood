@@ -6,7 +6,6 @@ import SEO from './SEO';
 import useModal from '~/hooks/useModal';
 import useIsMobile from '~/hooks/useIsMobile';
 import { getMovieData } from '~/utils/getMovieData';
-import { moviePage } from '~/constants/seoData';
 import { getMovieDetails } from '~/services';
 
 const MovieCard = ({ movie = {} }) => {
@@ -41,8 +40,8 @@ const MovieCard = ({ movie = {} }) => {
   }, []);
 
   // Construct SEO-friendly keywords dynamically
-  const genreNames = genres.map((item) => item.name).join(', ');
-  const newSeoKeywords = `${moviePage.keywords}, ${genreNames}`;
+  // const genreNames = genres.map((item) => item.name).join(', ');
+  // const newSeoKeywords = `${moviePage.keywords}, ${genreNames}`;
 
   // Fetch movie details (streaming, runtime, video) when movieId changes
   useEffect(() => {
@@ -126,9 +125,8 @@ const MovieCard = ({ movie = {} }) => {
   return (
     <>
       {/* SEO Metadata */}
-      <SEO
-        {...{ ...moviePage, keywords: newSeoKeywords, schemaData: movieSchema }}
-      />
+      {/* SEO Metadata - Schema Only */}
+      <SEO {...{ schemaData: movieSchema }} />
 
       {/* Movie Trailer */}
       <div className="w-full">

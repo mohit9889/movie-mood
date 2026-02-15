@@ -1,19 +1,20 @@
 const BASE_URL = process.env.BASE_URL;
 
 export const homePage = {
-  title: 'Watch Movies Online - Find Films Based on Your Mood | Movie Mood',
+  title:
+    'FilmVibe - Discover Movies by Your Mood | Watch Trailers & Recommendations',
   description:
-    'Discover a vast collection of movies online and find the perfect film to match your mood. From exciting action movies to heartwarming family favorites, explore our curated selection today.',
+    'Stop scrolling and start watching! FilmVibe helps you find the perfect movie based on your current mood. Whether you feel like laughing, crying, or being thrilled, we have the best movie recommendations for you.',
   keywords:
-    'Discover movies based on your mood, Watch films online, Find exciting action movies, Explore heartwarming family favorites, Browse thrillers, comedies, dramas, and more, Your one-stop destination for cinematic entertainment, Personalized movie recommendations, Dive into a world of movie magic, movies online,watch films, movie genres, cinematic entertainment',
+    'movie mood picker, what movie to watch, find movies by mood, filmvibe, movie recommendations, best movies for happy mood, sad movie recommendations, thriller movies to watch, movie suggestion tool',
   ogImage: `${BASE_URL}/img/logo.png`,
   schemaData: {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'Movie Mood',
+    name: 'FilmVibe',
     url: BASE_URL,
     description:
-      'Discover movies based on your mood. Watch films online and find exciting action movies, heartwarming family favorites, thrillers, comedies, and more.',
+      'FilmVibe helps you find the perfect movie based on your current mood.',
     potentialAction: {
       '@type': 'SearchAction',
       target: `${BASE_URL}/search?q={search_term_string}`,
@@ -21,7 +22,7 @@ export const homePage = {
     },
     publisher: {
       '@type': 'Organization',
-      name: 'Movie Mood',
+      name: 'FilmVibe',
       logo: {
         '@type': 'ImageObject',
         url: `${BASE_URL}/img/logo.png`,
@@ -56,12 +57,28 @@ export const pageNotFound = {
   },
 };
 
-export const moviePage = {
-  title:
-    'Discover Movies by Mood - Find Films to Match Your Emotions | Movie Mood',
-  description:
-    "Explore a wide range of movies categorized by mood on [Your Website Name]. Find the perfect film to match your emotions, whether you're in the mood for excitement, romance, suspense, or laughter.",
-  keywords:
-    'Discover movies by mood, Find films to match your emotions, Explore movies based on your mood, Exciting action-packed adventures, Heartwarming romance movies, Suspenseful thriller films, Browse comedy movies for laughter, Select movies by mood, Movies for every emotion, movies by mood, films to match emotions, exciting adventures,romantic movies,suspenseful thrillers,comedy films',
-  ogImage: `${BASE_URL}/img/logo.png`,
+export const getMoviePageSeo = (genreName, moodName) => {
+  const mood = moodName || genreName;
+  const title = `Best ${mood} Movies to Watch Now | FilmVibe`;
+  const description = `Looking for the best ${mood.toLowerCase()} movies? Discover our curated list of top-rated ${genreName.toLowerCase()} films that match your current mood. Watch trailers, check ratings, and find your next favorite movie on FilmVibe.`;
+  const keywords = `best ${mood.toLowerCase()} movies, watch ${genreName.toLowerCase()} movies online, top rated ${mood.toLowerCase()} films, movies for ${mood.toLowerCase()} mood, ${genreName.toLowerCase()} movie recommendations, FilmVibe ${mood} movies`;
+
+  return {
+    title,
+    description,
+    keywords,
+    ogImage: `${BASE_URL}/img/logo.png`,
+    schemaData: {
+      '@context': 'https://schema.org',
+      '@type': 'CollectionPage',
+      name: title,
+      description: description,
+      url: `${BASE_URL}/movies/${mood.toLowerCase().replace(/\s+/g, '-')}`,
+      isPartOf: {
+        '@type': 'WebSite',
+        name: 'FilmVibe',
+        url: BASE_URL,
+      },
+    },
+  };
 };
