@@ -1,6 +1,6 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: process.env.BASE_URL || 'https://moviemood-psi.vercel.app',
+  siteUrl: 'https://www.filmvibe.fun',
   generateRobotsTxt: true,
   // optional
   robotsTxtOptions: {
