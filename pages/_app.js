@@ -5,6 +5,7 @@ import FullPageLoader from '~/components/FullPageLoader';
 import { ThemesProvider } from '~/context/themesContext';
 import { LoadingProvider, useLoading } from '~/context/loadingContext';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { Analytics } from '@vercel/analytics/next';
 import '~/styles/globals.scss';
 
 export default function App({ Component, pageProps }) {
@@ -35,6 +36,7 @@ export default function App({ Component, pageProps }) {
           routeChangeLoading={routeChangeLoading}
         />
         <SpeedInsights />
+        <Analytics />
       </LoadingProvider>
     </ThemesProvider>
   );
